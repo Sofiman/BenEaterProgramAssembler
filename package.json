@@ -1,0 +1,18 @@
+{
+  "name": "beneatercompiler",
+  "version": "1.0.0",
+  "description": "Convert a simple prototype code into binary data for Ben Eater's 8 bit computer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sofiane (Sofiman)",
+  "license": "MIT",
+  "bin": {
+    "bepc": "index.js",
+    "ben-eater-program-compiler": "index.js"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2"
+  }
+}
