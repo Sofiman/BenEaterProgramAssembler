@@ -1,9 +1,14 @@
 function createBlock(dictionnary){
     Object.keys(dictionnary.instructions).forEach(key => {
-        dictionnary.instructions[key] = parseInt(dictionnary.instructions[key], 2)
+        let val = dictionnary.instructions[key]
+        if(!val.toLowerCase().startsWith('0x') || !val.toLowerCase().startsWith('0b'))
+            val = '0b' + val
+        dictionnary.instructions[key] = toInt(val)
     })
-    if(!dictionnary.memory_size){
+    if(!dictionnary.memory_size || !dictionnary.memory_size instanceof Number){
         dictionnary.memory_size = 16
+    } else {
+        dictionnary.memory_size = Math.round(dictionnary.memory_size)
     }
     return {
         variables: {},
@@ -24,7 +29,7 @@ function addLine(block, address, line){
         if(start.startsWith(':')){
             let name = start.substring(1)
             if(!block.variables[name]){
-                let val = argument ? (argument.toLowerCase().startsWith('0b') ? parseInt(argument.substring(2), 2) : parseInt(argument)) : 0
+                let val = argument ? toInt(argument) : 0
                 block.variables[name] = {
                     address: parseInt(address),
                     value: argument ? (val & 0xFF) : undefined
@@ -101,6 +106,15 @@ function m(scale, base=16){
         template += '0'
     }
     return template
+}
+
+function toInt(str){
+    if(str.toLowerCase().startsWith('0b'))
+        return parseInt(str.substring(2), 2)
+    else if(str.toLowerCase().startsWith('0x'))
+        return parseInt(str.substring(2), 16)
+    else 
+        return parseInt(str)
 }
 
 module.exports = { createBlock, addLine, resolve, process }

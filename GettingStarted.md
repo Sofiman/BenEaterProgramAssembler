@@ -2,7 +2,7 @@
 *I am Sorry for my bad english and if some sentences are not correct or not understandable, I haven't a English origin. If some informations are wrong (like instructions descriptions) I'll accept any recitification and I would love code changes (like features) or optimizations !*
 
 ## Requirements
-You can only use the set of instructions available in Bean Eater's computer but you can also change it by using the option `--dict={p}` or `-d={p}` where {p} is a path to the dictionnary JSON file. The format is simple, the root element must be an object with an object at the key "instructions", in this object, each keys represent and instruction and the value is the opcode. If you want to upgrade the memory size (default is 16 bytes) you can add an element with key "memory_size" to the json where the value represents the number of bytes of your memory.
+You can only use the set of instructions available in Bean Eater's computer but you can also change it by using the option `--dict={p}` or `-d={p}` where {p} is a path to the dictionnary JSON file. The format is simple, the root element must be an object with an object at the key "instructions", in this object, each keys represent and instruction and the value is the opcode (binary and hex values only). If you want to upgrade the memory size (default is 16 bytes) you can add an element with key "memory_size" to the json where the value represents the number of bytes of your memory.
 
 Default instructions are: 
 * `NOP` (0b0000): No operation
@@ -41,7 +41,7 @@ This example is a valid program, his task is to add together content of the A an
 
 ### Variables!
 You use variables anywhere in your code. Variables can contains a (4 bit, according to Ben Eater's default RAM configuration) integer. In your statement it will be replaced by the address of the variabel definition.
-The definition of a variable take one byte (the value), so one line of your program, you can name it for more readable code, it starts with `:{n}` where {n} is the name of your variable, it can contain an 8-bit integer (according to Ben Eater's default RAM configuration) add `,{i}` where i is the integer in decimal.
+The definition of a variable take one byte (the value), so one line of your program, you can name it for more readable code, it starts with `:{n}` where {n} is the name of your variable, it can contain an 8-bit integer (according to Ben Eater's default RAM configuration) add `,{i}` where i is the integer (binary and hex values allowed with prefixes).
 
 __Examples__:
 Above, we loaded variable X and add it to Y, but we didn't defined them... The way to do it:

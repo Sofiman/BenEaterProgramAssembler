@@ -8,6 +8,10 @@
   },
   "author": "Sofiane (Sofiman)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SofianeLeCubeur/BenEaterProgramCompiler"
+  },
   "bin": {
     "bepc": "index.js",
     "ben-eater-program-compiler": "index.js"
