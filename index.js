@@ -72,7 +72,7 @@ parser.resolve(block, result => {
     } else {
         let keys = Object.keys(data)
         if(!useOutputFormatting)
-            console.log(ft('Addr', keys[0].substring(1)), 'Code' + (shouldShowPseudoCode ? '     | Statement' : ''))
+            console.log(ft('Addr', keys[0].substring(1)), ft('Code', data[keys[0]]), (shouldShowPseudoCode ? 'Statement' : ''))
         for(let entry in data){
             if(useOutputFormatting)
                 console.log(data[entry])
@@ -93,7 +93,7 @@ function showSteps(data){
         let addr = keys[i].substring(1)
         let code = data[keys[i]]
         let len = code.length / 2
-        console.log(ft('Addr', addr) + ' Code' + (shouldShowPseudoCode ? '     | Statement' : ''), chalk.magentaBright(`[Step #${i + 1}]`))
+        console.log(ft('Addr', addr), ft('Code', code), (shouldShowPseudoCode ? 'Statement' : ''), chalk.magentaBright(`[Step #${i + 1}]`))
         console.log(chalk.yellowBright(addr), ' ', 
                     (lines[i].startsWith(':') ? chalk.greenBright(code.substring(0, len)) : chalk.blue(code.substring(0, len))) 
                     + chalk.greenBright(code.substring(len)), shouldShowPseudoCode ? '  ' + lines[i] : '')
