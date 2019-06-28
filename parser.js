@@ -5,7 +5,7 @@ function createBlock(dictionnary){
             val = '0b' + val
         dictionnary.instructions[key] = toInt(val)
     })
-    if(!dictionnary.memory_size || !dictionnary.memory_size instanceof Number){
+    if(!dictionnary.memory_size || !typeof dictionnary.memory_size == 'number'){
         dictionnary.memory_size = 16
     } else {
         dictionnary.memory_size = Math.round(dictionnary.memory_size)
