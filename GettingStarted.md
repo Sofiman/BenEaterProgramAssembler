@@ -64,4 +64,6 @@ If you want to program your computer by your well-compiled algorithm, you can se
 
 By default when you compile a program, the output doesn't show wich line (address) represents which statement in the code but you can shows the equivalents by adding the option `--pscode` or `-p`. If you use this tool with an another project, add the option `--format` or `-O` to make the tool only printing machine code easy to parse and a tip if you want to save it to a file (only works with defined terminals and on linux) add `> yourfile` to the command!
 
+You can find all availble options with the option `--help` with descriptions and with the syntax to use.
+
 Get a look in the provided example file where we have converted a little program from a [Ben Eater's Computer Video](https://www.youtube.com/watch?v=Zg1NdPKoosU) to this format
