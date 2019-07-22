@@ -1,4 +1,5 @@
 {
+    "name": "8-bit (4+4) Instructions set",
     "instructions": {
         "NOP": "0000",
         "LDA": "0001",
@@ -12,5 +13,9 @@
         "OUT": "1110",
         "HLT": "1111"
     },
-    "memory_size": 16
+    "memory_size": 16,
+    "instruction_model": {
+        "instruction_bits": 4,
+        "address_bits": 4
+    }
 }

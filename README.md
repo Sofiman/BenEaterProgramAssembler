@@ -1,6 +1,6 @@
-# Ben Eater Program Compiler
+# Ben Eater Program Assembler
 
-Compile your program to binary for your [Ben Eater's Computer](https://eater.net/8bit) version (with a custom set of instructions and memory settings) !
+Assemble/Compile your program to binary for your [Ben Eater's Computer](https://eater.net/8bit) version (with a custom set of instructions and memory settings) !
 Multiple ways of personnalisation implemented. I would love improving this project, Give me your ideas!
 
 ## Getting Started

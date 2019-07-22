@@ -37,7 +37,7 @@ ADD,@Y
 OUT
 HLT
 ```
-This example is a valid program, his task is to add together content of the A and B register and output it. But giving this to the compiler could not pass, you need...
+This example is a valid program, his task is to add together content of the A and B register and output it. But giving this to the assembler could not pass, you need...
 
 ### Variables!
 You use variables anywhere in your code. Variables can contains a (4 bit, according to Ben Eater's default RAM configuration) integer. In your statement it will be replaced by the address of the variabel definition.

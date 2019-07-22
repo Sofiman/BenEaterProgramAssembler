@@ -1,10 +1,10 @@
 {
-  "name": "beneatercompiler",
+  "name": "beneaterassembler",
   "version": "1.0.0",
-  "description": "Convert a simple prototype code into binary data for Ben Eater's 8 bit computer",
+  "description": "Convert a simple prototype code into binary data for Ben Eater's 8 bit computer or any other varient",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js --help"
   },
   "author": "Sofiane (Sofiman)",
   "license": "MIT",
@@ -13,8 +13,8 @@
     "url": "https://github.com/SofianeLeCubeur/BenEaterProgramCompiler"
   },
   "bin": {
-    "bepc": "index.js",
-    "ben-eater-program-compiler": "index.js"
+    "bepa": "index.js",
+    "ben-eater-program-assembler": "index.js"
   },
   "dependencies": {
     "chalk": "^2.4.2"

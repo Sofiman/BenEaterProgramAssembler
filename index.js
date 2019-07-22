@@ -7,6 +7,16 @@ const shouldShowSteps = args.indexOf('-S') >= 0 || args.indexOf('--steps') >= 0
 const shouldShowPseudoCode = args.indexOf('-p') >= 0 || args.indexOf('--pscode') >= 0
 const useOutputFormatting = args.indexOf('-O') >= 0 || args.indexOf('--format') >= 0
 
+if(process.argv.indexOf('--help') >= 0){
+    console.log('Available compile options ({file} represents a path to a file):')
+    console.log('  * -S, --steps: Shows a step by step interface to program your computer')
+    console.log('  * -p, --pscode: Shows the statement in your file next to the compiled form of the statement')
+    console.log('  * -O, --format: Removes columns and addresses to output your compiled program to a file')
+    console.log('  * -d={file}, --dict={file}: Sets a custom dictionnary to define instructions and code behaviour')
+    console.log('  * --help: Shows this list')
+    process.exit(0)
+}
+
 let dictionnary = 'dictionnary.json'
 
 for(let i in args){
@@ -68,7 +78,7 @@ parser.resolve(block, result => {
     }
     let data = parser.process(result, {steps: shouldShowSteps, pseudoCode: shouldShowPseudoCode})
     if(shouldShowSteps){
-        showSteps(data)
+        showSteps(data, block)
     } else {
         let keys = Object.keys(data)
         if(!useOutputFormatting)
@@ -82,7 +92,7 @@ parser.resolve(block, result => {
     }
 })
 
-function showSteps(data){
+function showSteps(data, block){
     let keys = Object.keys(data)
     console.log('Press ENTER to continue over all steps (' + keys.length + ')')
     let i = 0
@@ -92,13 +102,41 @@ function showSteps(data){
         }
         let addr = keys[i].substring(1)
         let code = data[keys[i]]
-        let len = code.length / 2
-        console.log(ft('Addr', addr), ft('Code', code), (shouldShowPseudoCode ? 'Statement' : ''), chalk.magentaBright(`[Step #${i + 1}]`))
-        console.log(chalk.yellowBright(addr), ' ', 
-                    (lines[i].startsWith(':') ? chalk.greenBright(code.substring(0, len)) : chalk.blue(code.substring(0, len))) 
-                    + chalk.greenBright(code.substring(len)), shouldShowPseudoCode ? '  ' + lines[i] : '')
+        let coloredCode = color(code, i, block)
+        console.log(ft('Addr', addr), ft('Code', code+'0'), (shouldShowPseudoCode ? 'Statement' : ''), chalk.magentaBright(`[Step #${i + 1}]`))
+        console.log(chalk.yellowBright(addr), ' ', coloredCode, shouldShowPseudoCode ? '  ' + lines[i] : '')
         i++
     })
+}
+
+function color(code, i, block){
+    let addressBits = block.dictionnary.instruction_model.address_bits,
+        instructionBits = block.dictionnary.instruction_model.instruction_bits
+    let len = block.rawLength
+    let str = ''
+
+    if(lines[i].startsWith(':')){
+        str = code.substring(0, len / 2) + ' ' + code.substring(len / 2)
+        return chalk.greenBright(str)
+    }
+
+    for(let j = len; j > 0; j--){
+        let bit = code[j - 1]
+
+        if(j >= (len - instructionBits) && j > addressBits){
+            str += chalk.blue(bit)
+        } else if(j <= addressBits){
+            str += chalk.greenBright(bit)
+        } else {
+            str += bit
+        }
+
+        if((j - 1) % 8 == 0){
+            str += ' '
+        }
+    }
+
+    return str
 }
 
 function error(type, message, line, extra){

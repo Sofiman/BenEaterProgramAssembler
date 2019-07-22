@@ -10,10 +10,16 @@ function createBlock(dictionnary){
     } else {
         dictionnary.memory_size = Math.round(dictionnary.memory_size)
     }
+    let length = dictionnary.instruction_model.instruction_bits + 
+            dictionnary.instruction_model.address_bits
+    let rawLength = Math.ceil(length / 8) * 8
+
     return {
         variables: {},
         code: [],
-        dictionnary
+        dictionnary,
+        length,
+        rawLength
     }
 }
 
@@ -72,30 +78,37 @@ function resolve(block, cb){
 function compile(block, statement){
     let opcode = block.dictionnary.instructions[statement.instruction]
     let addr = statement.argument ? (statement.argument.address || statement.argument) : 0
-    return opcode << 4 | addr
+    let operation =  shiftOperations['uint' + block.rawLength]
+    if(!operation){
+        console.warn('Warning: Unsupported memory layout: ' + block.rawLength + ' bits (' + block.length + '+' + (block.rawLength - block.length) + ')')
+        return -1
+    }
+    return operation(opcode, addr, block)
 }
 
 function process(block, options){
     let data = {}
     let memory_size = block.dictionnary.memory_size
-    let padding = m(memory_size, 4)
+    let addrPadding = m(memory_size, 4)
     let i = 0
+    
+    let padding = repeat('0', block.rawLength)
 
     for(i in block.code){
-        let addr = bin(i, padding)
+        let addr = bin(i, addrPadding)
         let statement = block.code[i]
-        data[addr] = bin(compile(block, statement))
+        data[addr] = bin(compile(block, statement), padding)
     }
 
     Object.keys(block.variables).forEach(key => {
         i++
-        let addr = bin(i, padding)
-        data[addr] = bin(block.variables[key].value)
+        let addr = bin(i, addrPadding)
+        data[addr] = bin(block.variables[key].value, padding)
     })
     return data
 }
 
-function bin(dec, padding='00000000'){
+function bin(dec, padding=repeat('0', 8)){
     let n = (dec >>> 0).toString(2) // Support for negative numbers
     return padding.substr(n.length) + n
 }
@@ -108,6 +121,14 @@ function m(scale, base=16){
     return template
 }
 
+function repeat(c, s){
+    let str = ''
+    for(let i = 0; i < s; i++){
+        str += c
+    }
+    return str
+}
+
 function toInt(str){
     if(str.toLowerCase().startsWith('0b'))
         return parseInt(str.substring(2), 2)
@@ -115,6 +136,15 @@ function toInt(str){
         return parseInt(str.substring(2), 16)
     else 
         return parseInt(str)
+}
+
+const shiftOperations = {
+    uint8(opc, addr) {
+        return opc << 4 | addr
+    },
+    uint16(opc, addr, block) {
+        return opc << 8 | addr & 0xFFFF
+    }
 }
 
 module.exports = { createBlock, addLine, resolve, process }
